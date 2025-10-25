@@ -1,0 +1,148 @@
+/* pages/create-vote/create-vote.wxss */
+
+.form-section {
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  background-color: #fafafa;
+  box-sizing: border-box;
+}
+
+.input:focus, .textarea:focus {
+  border-color: #1976d2;
+  background-color: white;
+}
+
+.textarea {
+  height: 120rpx;
+  resize: none;
+}
+
+.picker {
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  background-color: #fafafa;
+  font-size: 28rpx;
+  color: #333;
+  position: relative;
+}
+
+.picker-arrow {
+  position: absolute;
+  right: 20rpx;
+  color: #999;
+}
+
+/* 股票输入 */
+.stock-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.stock-input {
+  flex: 1;
+}
+
+.btn-search {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8rpx;
+  padding: 20rpx 30rpx;
+  font-size: 28rpx;
+  white-space: nowrap;
+}
+
+.btn-search:disabled {
+  background-color: #ccc;
+}
+
+.stock-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 8rpx;
+  border: 2rpx solid #e9ecef;
+}
+
+.stock-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.stock-price {
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+/* 时间选择器 */
+.datetime-picker {
+  display: flex;
+  gap: 20rpx;
+}
+
+.datetime-picker .picker {
+  flex: 1;
+}
+
+.time-tips {
+  margin-top: 15rpx;
+  padding: 15rpx;
+  background-color: #fff3cd;
+  border-radius: 8rpx;
+  border-left: 4rpx solid #ffc107;
+}
+
+.tips-text {
+  font-size: 24rpx;
+  color: #856404;
+}
+
+/* 表单操作 */
+.form-actions {
+  margin-top: 50rpx;
+  padding: 30rpx 0;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 25rpx;
+  font-size: 32rpx;
+  border-radius: 12rpx;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  color: #999;
+}

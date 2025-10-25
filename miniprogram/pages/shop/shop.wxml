@@ -1,0 +1,102 @@
+<!-- pages/shop/shop.wxml -->
+<view class="container">
+  <!-- 用户积分信息 -->
+  <view class="points-header card">
+    <view class="points-info">
+      <text class="points-label">我的积分</text>
+      <text class="points-number">{{userPoints}}</text>
+    </view>
+    <view class="points-tips">
+      <text class="tips-text">💡 预测正确可获得积分奖励</text>
+    </view>
+  </view>
+
+  <!-- 商品分类 -->
+  <view class="category-tabs">
+    <view 
+      class="tab-item {{categoryIndex === index ? 'active' : ''}}"
+      wx:for="{{categories}}" 
+      wx:key="value"
+      bindtap="switchCategory"
+      data-index="{{index}}"
+    >
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="product-list">
+    <view 
+      class="product-item card"
+      wx:for="{{filteredProducts}}" 
+      wx:key="id"
+      bindtap="showProductDetail"
+      data-product="{{item}}"
+    >
+      <image class="product-image" src="{{item.image}}" mode="aspectFill"></image>
+      
+      <view class="product-info">
+        <text class="product-name">{{item.name}}</text>
+        <text class="product-desc text-muted">{{item.description}}</text>
+        
+        <view class="product-footer">
+          <view class="price-info">
+            <text class="price-points">{{item.points}}</text>
+            <text class="price-label">积分</text>
+          </view>
+          
+          <view class="stock-info">
+            <text class="stock-text {{item.stock > 0 ? 'in-stock' : 'out-stock'}}">
+              {{item.stock > 0 ? '库存' + item.stock : '缺货'}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredProducts.length === 0}}">
+    <text class="empty-text">暂无商品</text>
+  </view>
+</view>
+
+<!-- 商品详情弹窗 -->
+<view class="modal-overlay {{showModal ? 'show' : ''}}" bindtap="hideModal">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">{{selectedProduct.name}}</text>
+      <text class="modal-close" bindtap="hideModal">×</text>
+    </view>
+    
+    <view class="modal-body">
+      <image class="modal-image" src="{{selectedProduct.image}}" mode="aspectFill"></image>
+      
+      <view class="product-detail">
+        <text class="detail-desc">{{selectedProduct.description}}</text>
+        
+        <view class="detail-info">
+          <view class="info-row">
+            <text class="info-label">所需积分：</text>
+            <text class="info-value text-primary">{{selectedProduct.points}}积分</text>
+          </view>
+          
+          <view class="info-row">
+            <text class="info-label">剩余库存：</text>
+            <text class="info-value">{{selectedProduct.stock}}件</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button 
+        class="btn-primary exchange-btn"
+        bindtap="exchangeProduct"
+        disabled="{{selectedProduct.stock <= 0 || userPoints < selectedProduct.points}}"
+      >
+        {{selectedProduct.stock <= 0 ? '缺货' : userPoints < selectedProduct.points ? '积分不足' : '立即兑换'}}
+      </button>
+    </view>
+  </view>
+</view>

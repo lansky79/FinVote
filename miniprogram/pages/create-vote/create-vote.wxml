@@ -1,0 +1,166 @@
+<!-- pages/create-vote/create-vote.wxml -->
+<view class="container">
+  <form bindsubmit="handleSubmit">
+    <view class="form-section card">
+      <view class="section-title">基本信息</view>
+      
+      <view class="form-item">
+        <text class="label">投票标题 *</text>
+        <input 
+          class="input" 
+          name="title"
+          placeholder="请输入投票标题"
+          value="{{formData.title}}"
+          bindinput="handleInput"
+          data-field="title"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">投票描述</text>
+        <textarea 
+          class="textarea" 
+          name="description"
+          placeholder="请输入投票描述（可选）"
+          value="{{formData.description}}"
+          bindinput="handleInput"
+          data-field="description"
+          maxlength="200"
+        ></textarea>
+      </view>
+    </view>
+
+    <view class="form-section card">
+      <view class="section-title">投票标的</view>
+      
+      <view class="form-item">
+        <text class="label">标的类型</text>
+        <picker 
+          range="{{voteTypes}}" 
+          range-key="name"
+          value="{{voteTypeIndex}}"
+          bindchange="handleVoteTypeChange"
+        >
+          <view class="picker">
+            {{voteTypes[voteTypeIndex].name}}
+            <text class="picker-arrow">></text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">{{voteTypes[voteTypeIndex].value === 'stock' ? '股票代码' : '指数代码'}} *</text>
+        <view class="stock-input-wrapper">
+          <input 
+            class="input stock-input" 
+            name="stockCode"
+            placeholder="{{voteTypes[voteTypeIndex].value === 'stock' ? '如：000001' : '如：000001.SH'}}"
+            value="{{formData.stockCode}}"
+            bindinput="handleInput"
+            data-field="stockCode"
+          />
+          <button 
+            class="btn-search" 
+            type="button"
+            bindtap="searchStock"
+            disabled="{{!formData.stockCode}}"
+          >
+            搜索
+          </button>
+        </view>
+      </view>
+
+      <view class="form-item" wx:if="{{stockInfo.name}}">
+        <text class="label">标的名称</text>
+        <view class="stock-info">
+          <text class="stock-name">{{stockInfo.name}}</text>
+          <text class="stock-price text-{{stockInfo.change >= 0 ? 'success' : 'danger'}}">
+            ¥{{stockInfo.price}} ({{stockInfo.change >= 0 ? '+' : ''}}{{stockInfo.changePercent}}%)
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-section card">
+      <view class="section-title">时间设置</view>
+      
+      <view class="form-item">
+        <text class="label">投票截止时间 *</text>
+        <view class="datetime-picker">
+          <picker 
+            mode="date" 
+            value="{{formData.endDate}}"
+            start="{{today}}"
+            bindchange="handleDateChange"
+            data-field="endDate"
+          >
+            <view class="picker">{{formData.endDate || '选择日期'}}</view>
+          </picker>
+          <picker 
+            mode="time" 
+            value="{{formData.endTime}}"
+            bindchange="handleTimeChange"
+            data-field="endTime"
+          >
+            <view class="picker">{{formData.endTime || '选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="form-item">
+        <text class="label">结算时间 *</text>
+        <view class="datetime-picker">
+          <picker 
+            mode="date" 
+            value="{{formData.settlementDate}}"
+            start="{{formData.endDate || today}}"
+            bindchange="handleDateChange"
+            data-field="settlementDate"
+          >
+            <view class="picker">{{formData.settlementDate || '选择日期'}}</view>
+          </picker>
+          <picker 
+            mode="time" 
+            value="{{formData.settlementTime}}"
+            bindchange="handleTimeChange"
+            data-field="settlementTime"
+          >
+            <view class="picker">{{formData.settlementTime || '选择时间'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="time-tips">
+        <text class="tips-text">💡 结算时间用于获取最终价格，建议设置在交易时间内</text>
+      </view>
+    </view>
+
+    <view class="form-section card">
+      <view class="section-title">奖励设置</view>
+      
+      <view class="form-item">
+        <text class="label">预测正确奖励积分</text>
+        <picker 
+          range="{{pointsOptions}}" 
+          value="{{pointsIndex}}"
+          bindchange="handlePointsChange"
+        >
+          <view class="picker">
+            {{pointsOptions[pointsIndex]}} 积分
+            <text class="picker-arrow">></text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-actions">
+      <button 
+        class="btn-primary submit-btn" 
+        formType="submit"
+        disabled="{{!canSubmit}}"
+      >
+        创建投票
+      </button>
+    </view>
+  </form>
+</view>

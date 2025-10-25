@@ -1,0 +1,260 @@
+/* pages/vote/vote.wxss */
+
+/* 筛选器 */
+.filter-bar {
+  background-color: white;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15rpx 20rpx;
+  font-size: 28rpx;
+}
+
+.filter-arrow {
+  color: #999;
+  font-size: 24rpx;
+}
+
+/* 投票项 */
+.vote-item {
+  margin-bottom: 20rpx;
+  position: relative;
+}
+
+.vote-header {
+  margin-bottom: 20rpx;
+}
+
+.vote-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.vote-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.vote-desc {
+  font-size: 26rpx;
+  line-height: 1.4;
+}
+
+.vote-status {
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  white-space: nowrap;
+}
+
+.status-active {
+  background-color: #e8f5e8;
+  color: #4caf50;
+}
+
+.status-ended {
+  background-color: #fff3e0;
+  color: #ff9800;
+}
+
+.status-settled {
+  background-color: #e3f2fd;
+  color: #2196f3;
+}
+
+/* 股票信息 */
+.stock-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25rpx;
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.stock-main {
+  display: flex;
+  align-items: center;
+  gap: 15rpx;
+}
+
+.stock-code {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.stock-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.stock-type {
+  font-size: 22rpx;
+  color: #999;
+  padding: 4rpx 8rpx;
+  background-color: #e0e0e0;
+  border-radius: 8rpx;
+}
+
+.reward-info {
+  text-align: right;
+}
+
+.reward-text {
+  display: block;
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 4rpx;
+}
+
+.reward-points {
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+/* 投票统计 */
+.vote-stats {
+  margin-bottom: 20rpx;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.participants {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.time-info {
+  font-size: 24rpx;
+}
+
+.vote-options {
+  display: flex;
+  gap: 20rpx;
+}
+
+.option {
+  flex: 1;
+  position: relative;
+}
+
+.option-label {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}
+
+.option-count {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.option-up .option-count {
+  color: #4caf50;
+}
+
+.option-down .option-count {
+  color: #f44336;
+}
+
+.option-bar {
+  height: 8rpx;
+  background-color: #e0e0e0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.option-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+.option-fill-up {
+  background-color: #4caf50;
+}
+
+.option-fill-down {
+  background-color: #f44336;
+}
+
+/* 创建者信息 */
+.creator-info {
+  display: flex;
+  align-items: center;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.creator-avatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 20rpx;
+  margin-right: 15rpx;
+}
+
+.creator-name {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  margin: 40rpx 0;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 30rpx;
+}
+
+/* 浮动按钮 */
+.fab {
+  position: fixed;
+  right: 30rpx;
+  bottom: 120rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background-color: #1976d2;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(25, 118, 210, 0.3);
+  z-index: 100;
+}
+
+.fab-icon {
+  color: white;
+  font-size: 48rpx;
+  font-weight: bold;
+}

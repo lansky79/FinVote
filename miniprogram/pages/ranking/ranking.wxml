@@ -1,0 +1,98 @@
+<!-- pages/ranking/ranking.wxml -->
+<view class="container">
+  <!-- 排行榜头部 -->
+  <view class="ranking-header card">
+    <view class="header-title">
+      <text class="title">积分排行榜</text>
+      <text class="subtitle text-muted">预测越准确，积分越高</text>
+    </view>
+    
+    <!-- 我的排名 -->
+    <view class="my-rank" wx:if="{{userInfo}}">
+      <view class="rank-info">
+        <text class="rank-label">我的排名</text>
+        <text class="rank-number text-primary">{{userInfo.rank || '-'}}</text>
+      </view>
+      <view class="rank-stats">
+        <text class="stat-item">积分: {{userInfo.points}}</text>
+        <text class="stat-item">准确率: {{userInfo.accuracy}}%</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 前三名 -->
+  <view class="top-three" wx:if="{{topUsers.length > 0}}">
+    <view class="podium">
+      <!-- 第二名 -->
+      <view class="podium-item second" wx:if="{{topUsers[1]}}">
+        <view class="medal medal-silver">2</view>
+        <image class="avatar" src="{{topUsers[1].avatarUrl}}" mode="aspectFill"></image>
+        <text class="name">{{topUsers[1].nickName}}</text>
+        <text class="points">{{topUsers[1].points}}分</text>
+      </view>
+      
+      <!-- 第一名 -->
+      <view class="podium-item first" wx:if="{{topUsers[0]}}">
+        <view class="crown">👑</view>
+        <view class="medal medal-gold">1</view>
+        <image class="avatar" src="{{topUsers[0].avatarUrl}}" mode="aspectFill"></image>
+        <text class="name">{{topUsers[0].nickName}}</text>
+        <text class="points">{{topUsers[0].points}}分</text>
+      </view>
+      
+      <!-- 第三名 -->
+      <view class="podium-item third" wx:if="{{topUsers[2]}}">
+        <view class="medal medal-bronze">3</view>
+        <image class="avatar" src="{{topUsers[2].avatarUrl}}" mode="aspectFill"></image>
+        <text class="name">{{topUsers[2].nickName}}</text>
+        <text class="points">{{topUsers[2].points}}分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排行榜列表 -->
+  <view class="ranking-list">
+    <view class="list-header">
+      <text class="section-title">完整排行榜</text>
+    </view>
+    
+    <view class="ranking-item" wx:for="{{users}}" wx:key="id">
+      <view class="rank-badge rank-{{item.rank <= 3 ? 'top' : 'normal'}}">
+        <text class="rank-text">{{item.rank}}</text>
+      </view>
+      
+      <image class="user-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+      
+      <view class="user-info">
+        <text class="user-name">{{item.nickName}}</text>
+        <view class="user-stats">
+          <text class="stat">{{item.totalVotes}}次投票</text>
+          <text class="stat">{{item.accuracy}}%准确率</text>
+        </view>
+      </view>
+      
+      <view class="user-points">
+        <text class="points-number">{{item.points}}</text>
+        <text class="points-label">积分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore}}">
+    <button class="btn-secondary" bindtap="loadMore" disabled="{{loading}}">
+      {{loading ? '加载中...' : '加载更多'}}
+    </button>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{users.length === 0 && !loading}}">
+    <text class="empty-text">暂无排行数据</text>
+  </view>
+
+  <!-- 登录提示 -->
+  <view class="login-tip card" wx:if="{{!userInfo}}">
+    <text class="tip-text">登录后查看您的排名</text>
+    <button class="btn-primary" bindtap="handleLogin">立即登录</button>
+  </view>
+</view>

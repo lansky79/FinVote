@@ -1,0 +1,241 @@
+<!-- pages/blockchain-demo/blockchain-demo.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="demo-header">
+    <text class="demo-title">区块链存证演示</text>
+    <text class="demo-subtitle">体验真实的区块链上链过程</text>
+  </view>
+
+  <!-- 网络状态 -->
+  <view class="network-status card">
+    <view class="status-header">
+      <view class="status-dot {{networkConnected ? 'connected' : 'disconnected'}}"></view>
+      <text class="network-name">腾讯云 TBaaS 联盟链</text>
+      <text class="refresh-btn" bindtap="refreshNetwork">🔄</text>
+    </view>
+    <view class="network-info">
+      <text class="info-text">集群ID: {{clusterInfo.clusterId}}</text>
+      <text class="info-text">通道: {{clusterInfo.channelName}}</text>
+    </view>
+  </view>
+
+  <!-- 演示操作区 -->
+  <view class="demo-actions">
+    
+    <!-- 模拟投票上链 -->
+    <view class="action-card card">
+      <view class="action-header">
+        <text class="action-title">📊 投票数据上链</text>
+        <text class="action-desc">将投票记录存储到区块链</text>
+      </view>
+      
+      <view class="action-form">
+        <view class="form-row">
+          <text class="form-label">股票代码:</text>
+          <input class="form-input" value="{{demoVote.stockCode}}" bindinput="updateVoteData" data-field="stockCode" placeholder="如: 000001"/>
+        </view>
+        
+        <view class="form-row">
+          <text class="form-label">预测方向:</text>
+          <picker range="{{predictionOptions}}" value="{{demoVote.predictionIndex}}" bindchange="updatePrediction">
+            <view class="picker-display">{{predictionOptions[demoVote.predictionIndex]}}</view>
+          </picker>
+        </view>
+        
+        <view class="form-row">
+          <text class="form-label">基准价格:</text>
+          <input class="form-input" type="digit" value="{{demoVote.basePrice}}" bindinput="updateVoteData" data-field="basePrice" placeholder="如: 12.50"/>
+        </view>
+      </view>
+      
+      <button class="btn-primary action-btn" bindtap="submitVoteToChain" disabled="{{submittingVote}}">
+        {{submittingVote ? '上链中...' : '提交到区块链'}}
+      </button>
+    </view>
+
+    <!-- 模拟积分奖励上链 -->
+    <view class="action-card card">
+      <view class="action-header">
+        <text class="action-title">💰 积分奖励上链</text>
+        <text class="action-desc">将积分变动记录存储到区块链</text>
+      </view>
+      
+      <view class="action-form">
+        <view class="form-row">
+          <text class="form-label">奖励类型:</text>
+          <picker range="{{rewardTypes}}" range-key="name" value="{{demoReward.typeIndex}}" bindchange="updateRewardType">
+            <view class="picker-display">{{rewardTypes[demoReward.typeIndex].name}}</view>
+          </picker>
+        </view>
+        
+        <view class="form-row">
+          <text class="form-label">积分数量:</text>
+          <input class="form-input" type="number" value="{{demoReward.points}}" bindinput="updateRewardData" data-field="points" placeholder="如: 10"/>
+        </view>
+        
+        <view class="form-row">
+          <text class="form-label">当前积分:</text>
+          <text class="current-balance">{{userPoints}} 积分</text>
+        </view>
+      </view>
+      
+      <button class="btn-primary action-btn" bindtap="submitRewardToChain" disabled="{{submittingReward}}">
+        {{submittingReward ? '上链中...' : '积分上链存证'}}
+      </button>
+    </view>
+
+  </view>
+
+  <!-- 实时交易状态 -->
+  <view class="transaction-status" wx:if="{{currentTransaction}}">
+    <view class="status-card card">
+      <view class="status-header">
+        <text class="status-title">⏳ 区块链交易处理中</text>
+        <view class="loading-animation">
+          <view class="dot dot1"></view>
+          <view class="dot dot2"></view>
+          <view class="dot dot3"></view>
+        </view>
+      </view>
+      
+      <view class="transaction-info">
+        <view class="info-row">
+          <text class="info-label">交易类型:</text>
+          <text class="info-value">{{currentTransaction.type}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">交易ID:</text>
+          <text class="info-value tx-id">{{currentTransaction.txId}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">数据哈希:</text>
+          <text class="info-value data-hash">{{currentTransaction.dataHash}}</text>
+        </view>
+        
+        <view class="info-row">
+          <text class="info-label">提交时间:</text>
+          <text class="info-value">{{currentTransaction.submitTime}}</text>
+        </view>
+      </view>
+      
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{currentTransaction.progress}}%"></view>
+      </view>
+      <text class="progress-text">预计 {{currentTransaction.estimatedTime}} 确认上链</text>
+    </view>
+  </view>
+
+  <!-- 区块链记录历史 -->
+  <view class="blockchain-history">
+    <view class="history-header">
+      <text class="history-title">📋 区块链存证记录</text>
+      <text class="refresh-history" bindtap="loadChainHistory">刷新</text>
+    </view>
+    
+    <view class="history-list">
+      <view class="history-item card" wx:for="{{chainHistory}}" wx:key="txId" bindtap="showTransactionDetail" data-tx="{{item}}">
+        <view class="history-header-row">
+          <view class="tx-type-badge {{item.type}}">
+            <text>{{item.typeText}}</text>
+          </view>
+          <view class="tx-status {{item.status}}">
+            <text>{{item.statusText}}</text>
+          </view>
+        </view>
+        
+        <view class="history-content">
+          <text class="tx-description">{{item.description}}</text>
+          <text class="tx-time">{{item.timeText}}</text>
+        </view>
+        
+        <view class="history-footer">
+          <text class="tx-id-short">交易ID: {{item.txIdShort}}</text>
+          <text class="view-detail">查看详情 ></text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-history" wx:if="{{chainHistory.length === 0}}">
+      <text class="empty-text">暂无区块链记录</text>
+      <text class="empty-hint">试试上面的演示操作</text>
+    </view>
+  </view>
+
+  <!-- 区块链浏览器 -->
+  <view class="blockchain-explorer card">
+    <view class="explorer-header">
+      <text class="explorer-title">🔍 区块链浏览器</text>
+    </view>
+    
+    <view class="explorer-content">
+      <view class="explorer-item" bindtap="openExplorer">
+        <text class="explorer-label">查看完整区块链数据</text>
+        <text class="explorer-arrow">></text>
+      </view>
+      
+      <view class="explorer-item" bindtap="verifyData">
+        <text class="explorer-label">验证数据完整性</text>
+        <text class="explorer-arrow">></text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 交易详情弹窗 -->
+<view class="modal-overlay {{showTxDetail ? 'show' : ''}}" bindtap="hideTxDetail">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">区块链交易详情</text>
+      <text class="modal-close" bindtap="hideTxDetail">×</text>
+    </view>
+    
+    <view class="modal-body" wx:if="{{selectedTx}}">
+      <view class="detail-section">
+        <text class="section-title">基本信息</text>
+        <view class="detail-row">
+          <text class="detail-label">交易类型:</text>
+          <text class="detail-value">{{selectedTx.typeText}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">交易状态:</text>
+          <text class="detail-value {{selectedTx.status}}">{{selectedTx.statusText}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">提交时间:</text>
+          <text class="detail-value">{{selectedTx.submitTime}}</text>
+        </view>
+      </view>
+      
+      <view class="detail-section">
+        <text class="section-title">区块链信息</text>
+        <view class="detail-row">
+          <text class="detail-label">交易ID:</text>
+          <text class="detail-value hash-text">{{selectedTx.txId}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">数据哈希:</text>
+          <text class="detail-value hash-text">{{selectedTx.dataHash}}</text>
+        </view>
+        <view class="detail-row" wx:if="{{selectedTx.blockNumber}}">
+          <text class="detail-label">区块高度:</text>
+          <text class="detail-value">{{selectedTx.blockNumber}}</text>
+        </view>
+      </view>
+      
+      <view class="detail-section" wx:if="{{selectedTx.data}}">
+        <text class="section-title">存证数据</text>
+        <view class="data-content">
+          <text class="data-text">{{selectedTx.dataPreview}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button class="btn-secondary" bindtap="copyTxId">复制交易ID</button>
+      <button class="btn-primary" bindtap="verifyTxData">验证数据</button>
+    </view>
+  </view>
+</view>

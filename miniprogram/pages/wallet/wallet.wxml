@@ -1,0 +1,255 @@
+<!-- pages/wallet/wallet.wxml -->
+<view class="container">
+  <!-- 钱包头部 -->
+  <view class="wallet-header">
+    <view class="network-status">
+      <view class="status-dot {{networkStatus.isConnected ? 'connected' : 'disconnected'}}"></view>
+      <text class="network-name">{{networkStatus.networkName || 'TBaaS 主网'}}</text>
+    </view>
+    
+    <view class="wallet-address">
+      <text class="address-label">钱包地址</text>
+      <view class="address-row" bindtap="copyAddress">
+        <text class="address-text">{{formatAddress(walletInfo.address)}}</text>
+        <text class="copy-icon">📋</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 代币余额卡片 -->
+  <view class="balance-card">
+    <view class="balance-header">
+      <image class="token-logo" src="/images/svt-logo.png" mode="aspectFit"></image>
+      <view class="token-info">
+        <text class="token-name">Stock Vote Token</text>
+        <text class="token-symbol">SVT</text>
+      </view>
+    </view>
+    
+    <view class="balance-amount">
+      <text class="amount-number">{{walletInfo.balance || 0}}</text>
+      <text class="amount-unit">SVT</text>
+    </view>
+    
+    <view class="balance-value">
+      <text class="value-text">≈ ${{((walletInfo.balance || 0) * 0.1).toFixed(2)}} USD</text>
+      <text class="price-change {{priceChange >= 0 ? 'positive' : 'negative'}}">
+        {{priceChange >= 0 ? '+' : ''}}{{priceChange}}%
+      </text>
+    </view>
+  </view>
+
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <view class="action-item" bindtap="showMintDemo">
+      <view class="action-icon mint-icon">⚡</view>
+      <text class="action-text">获取代币</text>
+    </view>
+    
+    <view class="action-item" bindtap="showTransferDemo">
+      <view class="action-icon transfer-icon">💸</view>
+      <text class="action-text">转账</text>
+    </view>
+    
+    <view class="action-item" bindtap="showContractDemo">
+      <view class="action-icon contract-icon">📋</view>
+      <text class="action-text">合约调用</text>
+    </view>
+    
+    <view class="action-item" bindtap="goToExplorer">
+      <view class="action-icon explorer-icon">🔍</view>
+      <text class="action-text">区块浏览器</text>
+    </view>
+  </view>
+
+  <!-- 区块链统计 -->
+  <view class="blockchain-stats card">
+    <view class="stats-header">
+      <text class="stats-title">区块链网络状态</text>
+      <view class="refresh-btn" bindtap="refreshNetworkStatus">
+        <text class="refresh-icon {{refreshing ? 'rotating' : ''}}">🔄</text>
+      </view>
+    </view>
+    
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-label">当前区块高度</text>
+        <text class="stat-value">{{networkStatus.blockHeight || 0}}</text>
+      </view>
+      
+      <view class="stat-item">
+        <text class="stat-label">待确认交易</text>
+        <text class="stat-value">{{networkStatus.pendingTransactions || 0}}</text>
+      </view>
+      
+      <view class="stat-item">
+        <text class="stat-label">Gas 价格</text>
+        <text class="stat-value">{{networkStatus.gasPrice || '0.000001'}}</text>
+      </view>
+      
+      <view class="stat-item">
+        <text class="stat-label">最新区块时间</text>
+        <text class="stat-value">{{formatTime(networkStatus.lastBlockTime)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 交易历史 -->
+  <view class="transaction-section">
+    <view class="section-header">
+      <text class="section-title">交易记录</text>
+      <text class="view-all" bindtap="goToTransactionHistory">查看全部</text>
+    </view>
+    
+    <view class="transaction-list">
+      <view 
+        class="transaction-item" 
+        wx:for="{{recentTransactions}}" 
+        wx:key="hash"
+        bindtap="showTransactionDetail"
+        data-hash="{{item.hash}}"
+      >
+        <view class="tx-icon-wrapper">
+          <view class="tx-icon {{item.type.toLowerCase()}}">
+            {{getTransactionIcon(item.type)}}
+          </view>
+          <view class="tx-status {{item.status}}"></view>
+        </view>
+        
+        <view class="tx-info">
+          <text class="tx-type">{{item.typeText}}</text>
+          <text class="tx-time">{{item.timeText}}</text>
+          <text class="tx-reason" wx:if="{{item.reason}}">{{item.reason}}</text>
+        </view>
+        
+        <view class="tx-amount">
+          <text class="amount-text {{item.isIncoming ? 'positive' : 'negative'}}">
+            {{item.amountText}}
+          </text>
+          <text class="tx-hash">{{formatTxHash(item.hash)}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-transactions" wx:if="{{recentTransactions.length === 0}}">
+      <text class="empty-text">暂无交易记录</text>
+      <button class="btn-primary" bindtap="showMintDemo">获取第一笔代币</button>
+    </view>
+  </view>
+
+  <!-- 实时交易状态 -->
+  <view class="live-status" wx:if="{{pendingTx}}">
+    <view class="status-card">
+      <view class="status-header">
+        <text class="status-title">交易处理中...</text>
+        <view class="loading-spinner"></view>
+      </view>
+      
+      <view class="status-info">
+        <text class="tx-hash-label">交易哈希:</text>
+        <text class="tx-hash-value">{{formatTxHash(pendingTx.hash)}}</text>
+      </view>
+      
+      <view class="status-progress">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{pendingTx.progress}}%"></view>
+        </view>
+        <text class="progress-text">预计 {{pendingTx.estimatedTime}} 确认</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 铸造代币弹窗 -->
+<view class="modal-overlay {{showMintModal ? 'show' : ''}}" bindtap="hideMintModal">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">获取 SVT 代币</text>
+      <text class="modal-close" bindtap="hideMintModal">×</text>
+    </view>
+    
+    <view class="modal-body">
+      <view class="mint-options">
+        <view 
+          class="mint-option {{selectedMintOption === index ? 'selected' : ''}}"
+          wx:for="{{mintOptions}}" 
+          wx:key="id"
+          bindtap="selectMintOption"
+          data-index="{{index}}"
+        >
+          <text class="option-title">{{item.title}}</text>
+          <text class="option-amount">+{{item.amount}} SVT</text>
+          <text class="option-desc">{{item.description}}</text>
+        </view>
+      </div>
+    </view>
+    
+    <view class="modal-footer">
+      <button 
+        class="btn-primary mint-btn"
+        bindtap="executeMint"
+        disabled="{{minting}}"
+      >
+        {{minting ? '处理中...' : '立即获取'}}
+      </button>
+    </view>
+  </view>
+</view>
+
+<!-- 转账弹窗 -->
+<view class="modal-overlay {{showTransferModal ? 'show' : ''}}" bindtap="hideTransferModal">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">转账 SVT</text>
+      <text class="modal-close" bindtap="hideTransferModal">×</text>
+    </view>
+    
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">接收地址</text>
+        <input 
+          class="form-input" 
+          placeholder="输入接收方用户ID或地址"
+          value="{{transferForm.toAddress}}"
+          bindinput="handleTransferInput"
+          data-field="toAddress"
+        />
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">转账数量</text>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="输入转账数量"
+          value="{{transferForm.amount}}"
+          bindinput="handleTransferInput"
+          data-field="amount"
+        />
+        <text class="balance-hint">余额: {{walletInfo.balance}} SVT</text>
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">备注 (可选)</text>
+        <input 
+          class="form-input" 
+          placeholder="转账备注"
+          value="{{transferForm.memo}}"
+          bindinput="handleTransferInput"
+          data-field="memo"
+        />
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button 
+        class="btn-primary transfer-btn"
+        bindtap="executeTransfer"
+        disabled="{{transferring || !canTransfer}}"
+      >
+        {{transferring ? '处理中...' : '确认转账'}}
+      </button>
+    </view>
+  </view>
+</view>

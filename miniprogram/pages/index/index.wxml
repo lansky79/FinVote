@@ -1,0 +1,86 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="card user-info" wx:if="{{userInfo}}">
+    <view class="flex-between">
+      <view class="flex">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view class="user-details">
+          <text class="username">{{userInfo.nickName}}</text>
+          <text class="points text-primary">积分: {{userInfo.points || 0}}</text>
+        </view>
+      </view>
+      <view class="rank-info">
+        <text class="rank-text">排名: {{userInfo.rank || '-'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 登录提示 -->
+  <view class="card login-prompt" wx:if="{{!userInfo}}">
+    <view class="flex-center flex-column">
+      <text class="login-title">欢迎来到股票投票</text>
+      <text class="login-desc text-muted">登录后开始预测股票涨跌，赢取积分</text>
+      <button class="btn-primary mt-20" bindtap="handleLogin">微信登录</button>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-grid">
+    <view class="stat-item card">
+      <text class="stat-number text-primary">{{stats.totalVotes || 0}}</text>
+      <text class="stat-label">总投票数</text>
+    </view>
+    <view class="stat-item card">
+      <text class="stat-number text-success">{{stats.correctVotes || 0}}</text>
+      <text class="stat-label">预测正确</text>
+    </view>
+    <view class="stat-item card">
+      <text class="stat-number">{{stats.accuracy || '0%'}}</text>
+      <text class="stat-label">准确率</text>
+    </view>
+  </view>
+
+  <!-- 热门投票 -->
+  <view class="section">
+    <view class="section-header flex-between">
+      <text class="section-title">热门投票</text>
+      <text class="more-link text-primary" bindtap="goToVote">查看更多</text>
+    </view>
+    
+    <view class="vote-list">
+      <view class="vote-item card" wx:for="{{hotVotes}}" wx:key="id" bindtap="goToVoteDetail" data-id="{{item.id}}">
+        <view class="vote-header flex-between">
+          <text class="vote-title">{{item.title}}</text>
+          <text class="vote-status {{item.status === 'active' ? 'text-success' : 'text-muted'}}">
+            {{item.status === 'active' ? '进行中' : '已结束'}}
+          </text>
+        </view>
+        <view class="vote-info">
+          <text class="stock-code text-primary">{{item.stockCode}}</text>
+          <text class="vote-time text-muted">{{item.endTime}}</text>
+        </view>
+        <view class="vote-stats flex-between mt-20">
+          <text class="participants text-muted">{{item.participants}}人参与</text>
+          <view class="vote-options">
+            <text class="option-up text-success">看涨 {{item.upVotes}}</text>
+            <text class="option-down text-danger ml-20">看跌 {{item.downVotes}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速操作 -->
+  <view class="quick-actions">
+    <button class="btn-primary action-btn" bindtap="goToCreateVote">
+      <text>创建投票</text>
+    </button>
+    <button class="btn-secondary action-btn" bindtap="goToBlockchainDemo">
+      <text>🔗 区块链演示</text>
+    </button>
+    <button class="btn-secondary action-btn" bindtap="goToShop">
+      <text>积分商城</text>
+    </button>
+  </view>
+</view>

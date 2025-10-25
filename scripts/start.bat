@@ -1,0 +1,13 @@
+@echo off
+echo 启动股票投票小程序后端服务...
+
+cd /d "%~dp0..\server"
+
+echo 检查依赖...
+if not exist node_modules (
+    echo 安装依赖包...
+    npm install
+)
+
+echo 启动服务器...
+npm run dev

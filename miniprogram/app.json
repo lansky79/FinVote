@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/vote/vote",
+    "pages/create-vote/create-vote",
+    "pages/ranking/ranking",
+    "pages/profile/profile",
+    "pages/shop/shop",
+    "pages/blockchain-demo/blockchain-demo"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1976d2",
+    "navigationBarTitleText": "股票投票",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#1976d2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/vote/vote",
+        "text": "投票"
+      },
+      {
+        "pagePath": "pages/ranking/ranking",
+        "text": "排行榜"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userInfo": {
+      "desc": "用于获取用户信息"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}
