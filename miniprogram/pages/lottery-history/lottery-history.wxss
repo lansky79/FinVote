@@ -1,0 +1,112 @@
+/* pages/lottery-history/lottery-history.wxss */
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 历史记录列表 */
+.history-list {
+  padding-bottom: 20rpx;
+}
+
+.history-item {
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.prize-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.prize-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.prize-points {
+  font-size: 26rpx;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.cost-info {
+  text-align: right;
+}
+
+.cost-text {
+  font-size: 24rpx;
+  color: #f44336;
+}
+
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.time-text {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.net-points {
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.net-points.positive {
+  color: #4caf50;
+}
+
+.net-points.negative {
+  color: #f44336;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 加载更多 */
+.load-more, .no-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  font-size: 24rpx;
+  color: #999;
+}

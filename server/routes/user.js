@@ -66,15 +66,18 @@ router.get('/info', authenticate, async (req, res) => {
 router.get('/stats', authenticate, async (req, res) => {
   try {
     const user = req.user
+    const totalVotes = user.totalVotes || 0
+    const correctVotes = user.correctVotes || 0
+    const accuracy = totalVotes > 0 ? Math.round((correctVotes / totalVotes) * 100) : 0
     
     res.json({
       success: true,
       data: {
-        totalVotes: user.totalVotes,
-        correctVotes: user.correctVotes,
-        accuracy: `${user.accuracy}%`,
-        points: user.points,
-        rank: user.rank
+        totalVotes,
+        correctVotes,
+        accuracy: `${accuracy}%`,
+        points: user.points || 0,
+        rank: user.rank || '-'
       }
     })
   } catch (error) {

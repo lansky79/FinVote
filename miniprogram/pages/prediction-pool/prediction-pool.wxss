@@ -1,0 +1,367 @@
+/* pages/prediction-pool/prediction-pool.wxss */
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding: 30rpx 0;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border-radius: 15rpx;
+}
+
+.page-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.page-desc {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+/* 标签栏 */
+.tab-bar {
+  display: flex;
+  background: white;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 25rpx;
+  font-size: 28rpx;
+  color: #666;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.tab-item.active {
+  background: #f5576c;
+  color: white;
+}
+
+/* 创建按钮 */
+.create-section {
+  margin-bottom: 30rpx;
+}
+
+.create-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx;
+  font-size: 28rpx;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.btn-icon {
+  margin-right: 10rpx;
+  font-size: 24rpx;
+}
+
+/* 资金池列表 */
+.pool-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.pool-item {
+  padding: 30rpx;
+  border-left: 4rpx solid #f5576c;
+}
+
+.pool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.pool-info {
+  flex: 1;
+}
+
+.pool-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.stock-info {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.pool-status {
+  margin-left: 20rpx;
+}
+
+.status-badge {
+  padding: 8rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 20rpx;
+  color: white;
+}
+
+.status-badge.active {
+  background: #4caf50;
+}
+
+.status-badge.ended {
+  background: #9e9e9e;
+}
+
+.status-badge.settled {
+  background: #2196f3;
+}
+
+/* 资金池详情 */
+.pool-details {
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.detail-value {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.prize-pool {
+  color: #f5576c;
+  font-size: 26rpx;
+}
+
+/* 预测统计 */
+.prediction-stats {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+  padding: 20rpx;
+  background: #fff;
+  border: 1rpx solid #eee;
+  border-radius: 12rpx;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 5rpx;
+}
+
+.stat-value {
+  font-size: 28rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5rpx;
+}
+
+.stat-value.up {
+  color: #4caf50;
+}
+
+.stat-value.down {
+  color: #f44336;
+}
+
+.stat-amount {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  background: #eee;
+  margin: 0 20rpx;
+}
+
+/* 时间信息 */
+.pool-time {
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.time-text {
+  font-size: 22rpx;
+  color: #f5576c;
+  background: #ffeef0;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 操作按钮 */
+.pool-actions {
+  display: flex;
+  gap: 15rpx;
+}
+
+.pool-actions button {
+  flex: 1;
+  margin: 0;
+  padding: 20rpx;
+  font-size: 24rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.empty-desc {
+  font-size: 24rpx;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 弹窗样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 600rpx;
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 32rpx;
+  color: #999;
+  padding: 10rpx;
+}
+
+.form-group {
+  margin-bottom: 25rpx;
+}
+
+.form-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.form-label {
+  font-size: 26rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  box-sizing: border-box;
+}
+
+.picker-view {
+  padding: 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+
+.modal-actions button {
+  flex: 1;
+  margin: 0;
+  padding: 25rpx;
+  font-size: 26rpx;
+}

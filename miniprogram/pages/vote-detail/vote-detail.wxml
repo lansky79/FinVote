@@ -1,0 +1,101 @@
+<!-- pages/vote-detail/vote-detail.wxml -->
+<view class="container" wx:if="{{!loading}}">
+  <!-- 投票信息 -->
+  <view class="card vote-info">
+    <view class="vote-header">
+      <text class="vote-title">{{vote.title}}</text>
+      <view class="vote-status-badge {{vote.status === 'active' ? 'status-active' : 'status-ended'}}">
+        {{vote.status === 'active' ? '进行中' : '已结束'}}
+      </view>
+    </view>
+    
+    <view class="stock-info">
+      <text class="stock-code">{{vote.stockCode}}</text>
+      <text class="stock-name">{{vote.stockName}}</text>
+    </view>
+    
+    <view class="vote-description" wx:if="{{vote.description}}">
+      <text>{{vote.description}}</text>
+    </view>
+    
+    <view class="time-info">
+      <view class="time-item">
+        <text class="time-label">投票截止：</text>
+        <text class="time-value">{{vote.endTime}}</text>
+      </view>
+      <view class="time-item">
+        <text class="time-label">结算时间：</text>
+        <text class="time-value">{{vote.settlementTime}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 投票统计 -->
+  <view class="card vote-stats">
+    <view class="stats-header">
+      <text class="stats-title">投票统计</text>
+      <text class="participants-count">{{vote.participants}}人参与</text>
+    </view>
+    
+    <view class="vote-options">
+      <view class="option-item option-up">
+        <text class="option-label">看涨</text>
+        <text class="option-count">{{vote.upVotes}}</text>
+        <view class="option-bar">
+          <view class="option-progress" style="width: {{vote.participants > 0 ? (vote.upVotes / vote.participants * 100) : 0}}%"></view>
+        </view>
+      </view>
+      
+      <view class="option-item option-down">
+        <text class="option-label">看跌</text>
+        <text class="option-count">{{vote.downVotes}}</text>
+        <view class="option-bar">
+          <view class="option-progress" style="width: {{vote.participants > 0 ? (vote.downVotes / vote.participants * 100) : 0}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户投票状态 -->
+  <view class="card user-vote-status" wx:if="{{userVote}}">
+    <view class="status-header">
+      <text class="status-title">您的投票</text>
+      <text class="status-badge {{userVote.isCorrect ? 'correct' : 'incorrect'}}" wx:if="{{vote.status === 'ended'}}">
+        {{userVote.isCorrect ? '预测正确' : '预测错误'}}
+      </text>
+    </view>
+    <view class="user-prediction">
+      <text>您选择了：</text>
+      <text class="prediction-text {{userVote.prediction === 'up' ? 'text-success' : 'text-danger'}}">
+        {{userVote.prediction === 'up' ? '看涨' : '看跌'}}
+      </text>
+    </view>
+    <view class="points-earned" wx:if="{{userVote.pointsEarned > 0}}">
+      <text>获得积分：+{{userVote.pointsEarned}}</text>
+    </view>
+  </view>
+
+  <!-- 投票按钮 -->
+  <view class="vote-actions" wx:if="{{vote.status === 'active' && !userVote}}">
+    <button class="vote-btn vote-up" bindtap="handleVote" data-prediction="up">
+      <text class="vote-btn-icon">📈</text>
+      <text class="vote-btn-text">看涨</text>
+    </button>
+    <button class="vote-btn vote-down" bindtap="handleVote" data-prediction="down">
+      <text class="vote-btn-icon">📉</text>
+      <text class="vote-btn-text">看跌</text>
+    </button>
+  </view>
+
+  <!-- 投票已结束或已投票提示 -->
+  <view class="vote-disabled" wx:if="{{vote.status !== 'active' || userVote}}">
+    <text class="disabled-text">
+      {{vote.status !== 'active' ? '投票已结束' : '您已投票'}}
+    </text>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view class="loading-container" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>

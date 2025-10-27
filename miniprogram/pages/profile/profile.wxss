@@ -283,4 +283,19 @@
 .achievement-desc {
   font-size: 22rpx;
   opacity: 0.8;
+}/* 管理员入口
+ */
+.admin-entry {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: white;
+  border-radius: 12rpx;
+  margin-top: 10rpx;
+}
+
+.admin-entry .menu-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.admin-entry .menu-arrow {
+  color: white;
 }

@@ -1,0 +1,45 @@
+<!-- pages/lottery-history/lottery-history.wxml -->
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading && history.length === 0}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 抽奖记录列表 -->
+  <view class="history-list" wx:if="{{!loading || history.length > 0}}">
+    <view class="history-item card" wx:for="{{history}}" wx:key="id">
+      <view class="item-header">
+        <view class="prize-info">
+          <text class="prize-name">{{item.prizeName}}</text>
+          <text class="prize-points">+{{item.prizePoints}}积分</text>
+        </view>
+        <view class="cost-info">
+          <text class="cost-text">-{{item.costPoints}}积分</text>
+        </view>
+      </view>
+      
+      <view class="item-footer">
+        <text class="time-text">{{item.timeText}}</text>
+        <text class="net-points {{item.netPoints >= 0 ? 'positive' : 'negative'}}">
+          净收益: {{item.netPoints >= 0 ? '+' : ''}}{{item.netPoints}}积分
+        </text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && history.length === 0}}">
+    <text class="empty-text">暂无抽奖记录</text>
+    <text class="empty-desc">快去转盘试试手气吧！</text>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && history.length > 0}}">
+    <text>加载更多...</text>
+  </view>
+
+  <!-- 没有更多 -->
+  <view class="no-more" wx:if="{{!hasMore && history.length > 0}}">
+    <text>没有更多记录了</text>
+  </view>
+</view>

@@ -1,0 +1,131 @@
+<!-- pages/reward-contract-simple/reward-contract-simple.wxml -->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">智能合约</text>
+    <text class="page-desc">自动化奖励分发系统</text>
+  </view>
+
+  <!-- 状态信息 -->
+  <view class="status-card">
+    <text class="status-text">{{message}}</text>
+    <text class="status-desc">{{contracts.length}}个合约正在运行</text>
+  </view>
+
+  <!-- 创建合约按钮 -->
+  <view class="create-section">
+    <button class="btn-primary create-btn" bindtap="showCreateContract">
+      <text class="btn-icon">➕</text>
+      <text>创建智能合约</text>
+    </button>
+  </view>
+
+  <!-- 合约列表 -->
+  <view class="contract-list">
+    <view class="contract-item" wx:for="{{contracts}}" wx:key="id">
+      <view class="contract-header">
+        <text class="contract-name">{{item.name}}</text>
+        <text class="contract-status {{item.status === '运行中' ? 'active' : 'pending'}}">{{item.status}}</text>
+      </view>
+      
+      <view class="contract-desc">
+        <text>{{item.description}}</text>
+      </view>
+      
+      <view class="contract-stats">
+        <view class="stat-item">
+          <text class="stat-label">执行次数</text>
+          <text class="stat-value">{{item.executed}}次</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-label">累计奖励</text>
+          <text class="stat-value">{{item.totalRewards}}积分</text>
+        </view>
+      </view>
+      
+      <view class="contract-actions">
+        <button class="btn-outline" bindtap="viewContract" data-id="{{item.id}}">查看详情</button>
+        <button class="btn-success" bindtap="executeContract" data-id="{{item.id}}">执行合约</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能介绍 -->
+  <view class="feature-intro">
+    <view class="intro-title">智能合约特性</view>
+    <view class="feature-grid">
+      <view class="feature-card">
+        <text class="feature-icon">⚡</text>
+        <text class="feature-name">自动执行</text>
+      </view>
+      <view class="feature-card">
+        <text class="feature-icon">🎯</text>
+        <text class="feature-name">精确计算</text>
+      </view>
+      <view class="feature-card">
+        <text class="feature-icon">🔒</text>
+        <text class="feature-name">透明可信</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="btn-secondary" bindtap="goBack">返回首页</button>
+  </view>
+</view>
+
+<!-- 创建合约弹窗 -->
+<view class="modal" wx:if="{{showCreateModal}}">
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">创建智能合约</text>
+      <text class="modal-close" bindtap="hideCreateModal">✕</text>
+    </view>
+    
+    <view class="form-group">
+      <text class="form-label">合约名称</text>
+      <input 
+        class="form-input" 
+        placeholder="例如：新用户奖励合约"
+        value="{{newContract.name}}"
+        bindinput="onInput"
+        data-field="name"
+      />
+    </view>
+
+    <view class="form-row">
+      <view class="form-group half">
+        <text class="form-label">基础奖励</text>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="10"
+          value="{{newContract.baseReward}}"
+          bindinput="onInput"
+          data-field="baseReward"
+        />
+      </view>
+      <view class="form-group half">
+        <text class="form-label">准确率奖励</text>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="20"
+          value="{{newContract.bonusReward}}"
+          bindinput="onInput"
+          data-field="bonusReward"
+        />
+      </view>
+    </view>
+
+    <view class="reward-preview">
+      <text class="preview-title">奖励规则预览</text>
+      <text class="preview-text">参与投票: {{newContract.baseReward}}积分</text>
+      <text class="preview-text">预测正确: {{newContract.baseReward + newContract.bonusReward}}积分</text>
+    </view>
+
+    <view class="modal-actions">
+      <button class="btn-outline" bindtap="hideCreateModal">取消</button>
+      <button class="btn-primary" bindtap="createContract">创建合约</button>
+    </view>
+  </view>
+</view>

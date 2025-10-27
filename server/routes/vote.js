@@ -48,8 +48,20 @@ router.get('/hot', async (req, res) => {
     // 按参与人数排序
     const sortedVotes = votes.sort((a, b) => b.participants - a.participants).slice(0, 10)
 
-    // 获取创建者信息
-    const votesWithCreator = await Promise.all(sortedVotes.map(async (vote) => {
+    // 检查用户是否已登录
+    let currentUserId = null
+    const token = req.headers.authorization?.replace('Bearer ', '')
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'mock-secret')
+        currentUserId = decoded.userId
+      } catch (error) {
+        // 忽略token验证错误
+      }
+    }
+
+    // 获取创建者信息和用户投票状态
+    const votesWithInfo = await Promise.all(sortedVotes.map(async (vote) => {
       let creatorName = '匿名用户'
       
       if (vote.createdBy) {
@@ -57,6 +69,16 @@ router.get('/hot', async (req, res) => {
         if (creator) {
           creatorName = creator.nickName
         }
+      }
+
+      // 检查当前用户是否已投票
+      let userVoted = false
+      if (currentUserId) {
+        const userVote = await UserVote.findOne({
+          userId: currentUserId,
+          voteId: vote._id
+        })
+        userVoted = !!userVote
       }
 
       return {
@@ -69,13 +91,14 @@ router.get('/hot', async (req, res) => {
         participants: vote.participants,
         upVotes: vote.upVotes,
         downVotes: vote.downVotes,
-        creator: creatorName
+        creator: creatorName,
+        userVoted: userVoted
       }
     }))
 
     res.json({
       success: true,
-      data: votesWithCreator
+      data: votesWithInfo
     })
   } catch (error) {
     console.error('获取热门投票错误:', error)
@@ -159,7 +182,6 @@ router.get('/list', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const vote = await Vote.findById(req.params.id)
-      .populate('createdBy', 'nickName avatarUrl')
 
     if (!vote) {
       return res.json({
@@ -168,12 +190,24 @@ router.get('/:id', async (req, res) => {
       })
     }
 
+    // 获取创建者信息
+    let creator = { nickName: '匿名用户', avatarUrl: '' }
+    if (vote.createdBy) {
+      const creatorUser = await User.findById(vote.createdBy)
+      if (creatorUser) {
+        creator = {
+          nickName: creatorUser.nickName,
+          avatarUrl: creatorUser.avatarUrl
+        }
+      }
+    }
+
     // 如果用户已登录，检查是否已投票
     let userVote = null
     const token = req.headers.authorization?.replace('Bearer ', '')
     if (token) {
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'mock-secret')
         userVote = await UserVote.findOne({
           userId: decoded.userId,
           voteId: vote._id
@@ -203,10 +237,7 @@ router.get('/:id', async (req, res) => {
         upVotes: vote.upVotes,
         downVotes: vote.downVotes,
         pointsReward: vote.pointsReward,
-        creator: {
-          nickName: vote.createdBy.nickName,
-          avatarUrl: vote.createdBy.avatarUrl
-        },
+        creator: creator,
         userVote: userVote ? {
           prediction: userVote.prediction,
           isCorrect: userVote.isCorrect,
@@ -215,6 +246,7 @@ router.get('/:id', async (req, res) => {
       }
     })
   } catch (error) {
+    console.error('获取投票详情错误:', error)
     res.json({
       success: false,
       message: '获取投票详情失败'

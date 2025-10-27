@@ -1,0 +1,267 @@
+/* pages/vote-detail/vote-detail.wxss */
+
+/* 投票信息 */
+.vote-info {
+  margin-bottom: 20rpx;
+}
+
+.vote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20rpx;
+}
+
+.vote-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.vote-status-badge {
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: white;
+}
+
+.status-active {
+  background-color: #4caf50;
+}
+
+.status-ended {
+  background-color: #999;
+}
+
+.stock-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.stock-code {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #1976d2;
+  margin-right: 15rpx;
+}
+
+.stock-name {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.vote-description {
+  margin-bottom: 20rpx;
+  padding: 15rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.time-info {
+  border-top: 1rpx solid #eee;
+  padding-top: 15rpx;
+}
+
+.time-item {
+  display: flex;
+  margin-bottom: 8rpx;
+}
+
+.time-label {
+  font-size: 24rpx;
+  color: #999;
+  width: 160rpx;
+}
+
+.time-value {
+  font-size: 24rpx;
+  color: #333;
+}
+
+/* 投票统计 */
+.vote-stats {
+  margin-bottom: 20rpx;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.stats-title {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.participants-count {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.vote-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15rpx;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  padding: 15rpx;
+  border-radius: 8rpx;
+  background-color: #f8f9fa;
+}
+
+.option-up {
+  border-left: 4rpx solid #4caf50;
+}
+
+.option-down {
+  border-left: 4rpx solid #f44336;
+}
+
+.option-label {
+  font-size: 26rpx;
+  font-weight: bold;
+  width: 80rpx;
+}
+
+.option-count {
+  font-size: 24rpx;
+  color: #666;
+  width: 60rpx;
+  text-align: right;
+  margin-right: 15rpx;
+}
+
+.option-bar {
+  flex: 1;
+  height: 8rpx;
+  background-color: #e0e0e0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.option-progress {
+  height: 100%;
+  background-color: #1976d2;
+  transition: width 0.3s ease;
+}
+
+/* 用户投票状态 */
+.user-vote-status {
+  margin-bottom: 20rpx;
+  background-color: #e8f5e8;
+  border-left: 4rpx solid #4caf50;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.status-title {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.status-badge {
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  color: white;
+}
+
+.status-badge.correct {
+  background-color: #4caf50;
+}
+
+.status-badge.incorrect {
+  background-color: #f44336;
+}
+
+.user-prediction {
+  margin-bottom: 10rpx;
+  font-size: 26rpx;
+}
+
+.prediction-text {
+  font-weight: bold;
+  margin-left: 10rpx;
+}
+
+.points-earned {
+  font-size: 24rpx;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+/* 投票按钮 */
+.vote-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.vote-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  border-radius: 12rpx;
+  border: none;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.vote-up {
+  background-color: #4caf50;
+  color: white;
+}
+
+.vote-down {
+  background-color: #f44336;
+  color: white;
+}
+
+.vote-btn-icon {
+  font-size: 40rpx;
+  margin-bottom: 10rpx;
+}
+
+.vote-btn-text {
+  font-size: 26rpx;
+}
+
+/* 禁用状态 */
+.vote-disabled {
+  text-align: center;
+  padding: 40rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.disabled-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 加载中 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  font-size: 28rpx;
+  color: #999;
+}

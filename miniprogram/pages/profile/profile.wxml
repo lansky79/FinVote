@@ -59,6 +59,13 @@
       <text class="menu-title">兑换记录</text>
       <text class="menu-arrow">></text>
     </view>
+    
+    <!-- 管理员入口 -->
+    <view class="menu-item admin-entry" wx:if="{{isAdmin}}" bindtap="goToAdmin">
+      <view class="menu-icon">⚙️</view>
+      <text class="menu-title">管理后台</text>
+      <text class="menu-arrow">></text>
+    </view>
   </view>
 
   <!-- 最近投票 -->

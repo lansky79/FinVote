@@ -52,6 +52,9 @@ app.use('/api/vote', require('./routes/vote'))
 app.use('/api/stock', require('./routes/stock'))
 app.use('/api/shop', require('./routes/shop'))
 app.use('/api/blockchain', require('./routes/blockchain'))
+app.use('/api/lottery', require('./routes/lottery'))
+app.use('/api/smart-contract', require('./routes/smartContract'))
+app.use('/api/reward-contract', require('./routes/rewardContract'))
 
 // 错误处理中间件
 app.use((err, req, res, next) => {

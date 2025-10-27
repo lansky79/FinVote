@@ -1,0 +1,156 @@
+<!-- pages/admin/admin.wxml -->
+<view class="container" wx:if="{{isAdmin}}">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">管理后台</text>
+    <text class="page-desc">系统数据管理与监控</text>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-grid">
+    <view class="stat-card">
+      <text class="stat-number">{{stats.totalUsers}}</text>
+      <text class="stat-label">总用户数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-number">{{stats.totalVotes}}</text>
+      <text class="stat-label">总投票数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-number">{{stats.totalContracts}}</text>
+      <text class="stat-label">智能合约</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-number">{{stats.totalPoints}}</text>
+      <text class="stat-label">积分总量</text>
+    </view>
+  </view>
+
+  <!-- 标签栏 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'users' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="users"
+    >
+      <text>用户管理</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'votes' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="votes"
+    >
+      <text>投票管理</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'contracts' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="contracts"
+    >
+      <text>合约管理</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'system' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="system"
+    >
+      <text>系统设置</text>
+    </view>
+  </view>
+
+  <!-- 用户管理 -->
+  <view class="content-section" wx:if="{{activeTab === 'users'}}">
+    <view class="user-list">
+      <view class="user-item" wx:for="{{users}}" wx:key="id">
+        <view class="user-info">
+          <image class="user-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+          <view class="user-details">
+            <text class="user-name">{{item.nickName}}</text>
+            <text class="user-stats">积分: {{item.points}} | 投票: {{item.totalVotes}}次</text>
+          </view>
+        </view>
+        <view class="user-actions">
+          <text class="user-status {{item.isActive ? 'active' : 'inactive'}}">
+            {{item.isActive ? '正常' : '禁用'}}
+          </text>
+          <button 
+            class="btn-outline btn-small" 
+            bindtap="toggleUser" 
+            data-id="{{item.id}}"
+          >
+            {{item.isActive ? '禁用' : '启用'}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 投票管理 -->
+  <view class="content-section" wx:if="{{activeTab === 'votes'}}">
+    <view class="vote-list">
+      <view class="vote-item" wx:for="{{votes}}" wx:key="id">
+        <view class="vote-header">
+          <text class="vote-title">{{item.title}}</text>
+          <text class="vote-status {{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="vote-info">
+          <text class="vote-detail">{{item.stockCode}} | {{item.participants}}人参与</text>
+          <text class="vote-time">{{item.createTimeText}}</text>
+        </view>
+        <view class="vote-actions">
+          <button class="btn-outline btn-small">编辑</button>
+          <button class="btn-danger btn-small" bindtap="deleteVote" data-id="{{item.id}}">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 合约管理 -->
+  <view class="content-section" wx:if="{{activeTab === 'contracts'}}">
+    <view class="contract-list">
+      <view class="contract-item" wx:for="{{contracts}}" wx:key="id">
+        <view class="contract-header">
+          <text class="contract-name">{{item.name}}</text>
+          <text class="contract-status {{item.status}}">{{item.statusText}}</text>
+        </view>
+        <view class="contract-info">
+          <text class="contract-detail">执行{{item.executed}}次 | 奖励{{item.totalRewards}}积分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 系统设置 -->
+  <view class="content-section" wx:if="{{activeTab === 'system'}}">
+    <view class="system-info">
+      <view class="info-item">
+        <text class="info-label">系统版本</text>
+        <text class="info-value">v1.0.0</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">数据库状态</text>
+        <text class="info-value status-ok">正常</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">服务器状态</text>
+        <text class="info-value status-ok">运行中</text>
+      </view>
+    </view>
+    
+    <view class="system-actions">
+      <button class="btn-secondary">清理缓存</button>
+      <button class="btn-secondary">导出数据</button>
+      <button class="btn-danger">重置系统</button>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 无权限提示 -->
+<view class="no-permission" wx:if="{{!isAdmin}}">
+  <text class="no-permission-text">正在验证管理员权限...</text>
+</view>

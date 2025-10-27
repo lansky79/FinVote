@@ -1,0 +1,222 @@
+<!-- pages/reward-contract/reward-contract.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">奖励分发合约</text>
+    <text class="page-desc">自动化投票奖励分发，提高效率和公平性</text>
+  </view>
+
+  <!-- 功能介绍 -->
+  <view class="intro-card card">
+    <view class="intro-title">智能合约的优势</view>
+    <view class="intro-list">
+      <view class="intro-item">
+        <text class="intro-icon">⚡</text>
+        <text class="intro-text">自动执行，无需人工干预</text>
+      </view>
+      <view class="intro-item">
+        <text class="intro-icon">🎯</text>
+        <text class="intro-text">精确计算，确保奖励公平</text>
+      </view>
+      <view class="intro-item">
+        <text class="intro-icon">🔒</text>
+        <text class="intro-text">透明可信，规则不可篡改</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'active' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="active"
+    >
+      <text>活跃合约</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'history' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="history"
+    >
+      <text>历史记录</text>
+    </view>
+  </view>
+
+  <!-- 创建按钮 -->
+  <view class="create-section">
+    <button class="btn-primary create-btn" bindtap="showCreateContract">
+      <text class="btn-icon">📜</text>
+      <text>创建奖励合约</text>
+    </button>
+  </view>
+
+  <!-- 合约列表 -->
+  <view class="contract-list" wx:if="{{!loading}}">
+    <view class="contract-item card" wx:for="{{contracts}}" wx:key="id">
+      <view class="contract-header">
+        <view class="contract-info">
+          <text class="contract-title">{{item.voteTitle}}</text>
+          <text class="contract-type">{{item.rewardTypeText}}</text>
+        </view>
+        <view class="contract-status">
+          <text class="status-badge {{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+
+      <view class="contract-details">
+        <view class="detail-row">
+          <text class="detail-label">基础奖励:</text>
+          <text class="detail-value">{{item.baseReward}}积分</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">奖励倍数:</text>
+          <text class="detail-value">{{item.bonusMultiplier}}x</text>
+        </view>
+        <view class="detail-row" wx:if="{{item.executedCount > 0}}">
+          <text class="detail-label">执行次数:</text>
+          <text class="detail-value">{{item.executedCount}}次</text>
+        </view>
+        <view class="detail-row" wx:if="{{item.totalRewards > 0}}">
+          <text class="detail-label">累计奖励:</text>
+          <text class="detail-value reward-amount">{{item.totalRewards}}积分</text>
+        </view>
+      </view>
+
+      <view class="contract-description" wx:if="{{item.description}}">
+        <text>{{item.description}}</text>
+      </view>
+
+      <view class="contract-time">
+        <text class="time-text">创建时间: {{item.createTimeText}}</text>
+      </view>
+
+      <view class="contract-actions">
+        <button class="btn-outline" bindtap="viewContract" data-id="{{item.id}}">
+          查看详情
+        </button>
+        
+        <button 
+          class="btn-primary" 
+          wx:if="{{item.status === 'draft'}}"
+          bindtap="deployContract" 
+          data-id="{{item.id}}"
+        >
+          部署合约
+        </button>
+        
+        <button 
+          class="btn-success" 
+          wx:if="{{item.status === 'deployed'}}"
+          disabled
+        >
+          运行中
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && contracts.length === 0}}">
+    <text class="empty-icon">📜</text>
+    <text class="empty-text">
+      {{activeTab === 'active' ? '暂无活跃的奖励合约' : '暂无历史记录'}}
+    </text>
+    <text class="empty-desc">
+      创建您的第一个自动奖励分发合约
+    </text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 创建合约弹窗 -->
+<view class="modal" wx:if="{{showCreateModal}}">
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">创建奖励合约</text>
+      <text class="modal-close" bindtap="hideCreateModal">✕</text>
+    </view>
+    
+    <view class="form-group">
+      <text class="form-label">选择投票</text>
+      <picker 
+        bindchange="onVoteChange" 
+        range="{{availableVotes}}" 
+        range-key="title"
+      >
+        <view class="picker-view">
+          {{selectedVoteTitle || '选择要绑定的投票'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">奖励类型</text>
+      <picker 
+        bindchange="onRewardTypeChange" 
+        range="{{['按准确率奖励', '参与奖励']}}"
+      >
+        <view class="picker-view">
+          {{createForm.rewardType === 'accuracy' ? '按准确率奖励' : '参与奖励'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <view class="form-group half">
+        <text class="form-label">基础奖励</text>
+        <input 
+          class="form-input" 
+          type="number"
+          placeholder="10"
+          value="{{createForm.baseReward}}"
+          bindinput="onFormInput"
+          data-field="baseReward"
+        />
+        <text class="form-unit">积分</text>
+      </view>
+      <view class="form-group half">
+        <text class="form-label">奖励倍数</text>
+        <input 
+          class="form-input" 
+          type="digit"
+          placeholder="2"
+          value="{{createForm.bonusMultiplier}}"
+          bindinput="onFormInput"
+          data-field="bonusMultiplier"
+        />
+        <text class="form-unit">倍</text>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">合约描述</text>
+      <textarea 
+        class="form-textarea" 
+        placeholder="描述合约的奖励规则和执行条件"
+        value="{{createForm.description}}"
+        bindinput="onFormInput"
+        data-field="description"
+      />
+    </view>
+
+    <view class="reward-preview">
+      <text class="preview-title">奖励预览</text>
+      <view class="preview-item">
+        <text>预测正确: {{correctReward}}积分</text>
+      </view>
+      <view class="preview-item">
+        <text>参与奖励: {{createForm.baseReward}}积分</text>
+      </view>
+    </view>
+
+    <view class="modal-actions">
+      <button class="btn-outline" bindtap="hideCreateModal">取消</button>
+      <button class="btn-primary" bindtap="createContract">创建合约</button>
+    </view>
+  </view>
+</view>

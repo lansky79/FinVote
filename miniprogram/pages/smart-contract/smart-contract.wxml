@@ -1,0 +1,111 @@
+<!-- pages/smart-contract/smart-contract.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">智能合约</text>
+    <text class="page-desc">创建和管理您的智能合约</text>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'my' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="my"
+    >
+      <text>我的合约</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'market' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="market"
+    >
+      <text>合约市场</text>
+    </view>
+  </view>
+
+  <!-- 创建合约按钮 -->
+  <view class="create-section" wx:if="{{activeTab === 'my'}}">
+    <button class="btn-primary create-btn" bindtap="createContract">
+      <text class="btn-icon">➕</text>
+      <text>创建智能合约</text>
+    </button>
+  </view>
+
+  <!-- 合约类型介绍 -->
+  <view class="contract-types" wx:if="{{activeTab === 'my' && contracts.length === 0}}">
+    <view class="types-title">支持的合约类型</view>
+    <view class="type-list">
+      <view class="type-item card" wx:for="{{contractTypes}}" wx:key="id">
+        <view class="type-header">
+          <text class="type-name">{{item.name}}</text>
+        </view>
+        <text class="type-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 合约列表 -->
+  <view class="contract-list" wx:if="{{!loading}}">
+    <view class="contract-item card" wx:for="{{contracts}}" wx:key="id">
+      <view class="contract-header">
+        <view class="contract-info">
+          <text class="contract-name">{{item.name}}</text>
+          <text class="contract-type">{{item.typeName}}</text>
+        </view>
+        <view class="contract-status">
+          <text class="status-badge {{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+
+      <view class="contract-desc">
+        <text>{{item.description}}</text>
+      </view>
+
+      <view class="contract-meta">
+        <text class="meta-item">创建时间: {{item.createTimeText}}</text>
+        <text class="meta-item" wx:if="{{item.gasUsed}}">Gas消耗: {{item.gasUsed}}</text>
+      </view>
+
+      <view class="contract-actions">
+        <button class="btn-outline" bindtap="viewContract" data-id="{{item.id}}">
+          查看详情
+        </button>
+        
+        <button 
+          class="btn-primary" 
+          wx:if="{{item.status === 'draft'}}"
+          bindtap="deployContract" 
+          data-id="{{item.id}}"
+        >
+          部署合约
+        </button>
+        
+        <button 
+          class="btn-success" 
+          wx:if="{{item.status === 'deployed'}}"
+          bindtap="executeContract" 
+          data-id="{{item.id}}"
+        >
+          执行合约
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && contracts.length === 0}}">
+    <text class="empty-icon">📜</text>
+    <text class="empty-text">
+      {{activeTab === 'my' ? '您还没有创建任何合约' : '暂无可用的合约'}}
+    </text>
+    <text class="empty-desc">
+      {{activeTab === 'my' ? '点击上方按钮创建您的第一个智能合约' : '请稍后再来查看'}}
+    </text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

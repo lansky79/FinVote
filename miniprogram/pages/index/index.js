@@ -77,37 +77,61 @@ Page({
       },
       success: (res) => {
         if (res.data.success) {
+          const stats = res.data.data
           this.setData({
-            stats: res.data.data
+            stats: {
+              totalVotes: stats.totalVotes || 0,
+              correctVotes: stats.correctVotes || 0,
+              accuracy: stats.accuracy || '0%'
+            }
           })
+        } else {
+          this.setDefaultStats()
         }
       },
       fail: () => {
-        // 请求失败时显示默认数据
-        this.setData({
-          stats: {
-            totalVotes: 0,
-            correctVotes: 0,
-            accuracy: '0%'
-          }
-        })
+        this.setDefaultStats()
+      }
+    })
+  },
+
+  // 设置默认统计数据
+  setDefaultStats() {
+    this.setData({
+      stats: {
+        totalVotes: 0,
+        correctVotes: 0,
+        accuracy: '0%'
       }
     })
   },
 
   // 加载热门投票
   loadHotVotes() {
+    console.log('开始加载热门投票，服务器地址:', app.globalData.serverUrl)
     wx.request({
       url: `${app.globalData.serverUrl}/vote/hot`,
+      header: app.globalData.token ? {
+        'Authorization': `Bearer ${app.globalData.token}`
+      } : {},
       success: (res) => {
+        console.log('热门投票接口响应:', res.data)
         if (res.data.success) {
+          const hotVotes = res.data.data.map(vote => ({
+            ...vote,
+            endTime: this.formatTime(vote.endTime),
+            userVoted: vote.userVoted || false
+          }))
+          console.log('处理后的热门投票数据:', hotVotes)
           this.setData({
-            hotVotes: res.data.data.map(vote => ({
-              ...vote,
-              endTime: this.formatTime(vote.endTime)
-            }))
+            hotVotes: hotVotes
           })
+        } else {
+          console.log('热门投票接口返回失败:', res.data.message)
         }
+      },
+      fail: (error) => {
+        console.log('热门投票接口请求失败:', error)
       }
     })
   },
@@ -164,6 +188,21 @@ Page({
     })
   },
 
+  // 跳转到转盘抽奖
+  goToLottery() {
+    if (!app.globalData.userInfo) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      })
+      return
+    }
+    
+    wx.navigateTo({
+      url: '/pages/lottery/lottery'
+    })
+  },
+
   // 跳转到积分商城
   goToShop() {
     if (!app.globalData.userInfo) {
@@ -176,6 +215,13 @@ Page({
     
     wx.navigateTo({
       url: '/pages/shop/shop'
+    })
+  },
+
+  // 跳转到智能合约
+  goToSmartContract() {
+    wx.navigateTo({
+      url: '/pages/reward-contract-simple/reward-contract-simple'
     })
   }
 })

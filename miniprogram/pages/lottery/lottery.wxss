@@ -1,0 +1,223 @@
+/* pages/lottery/lottery.wxss */
+
+/* 积分信息 */
+.points-info {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.points-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.points-title {
+  font-size: 28rpx;
+}
+
+.points-value {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.cost-info {
+  padding-top: 15rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.cost-text {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+/* 转盘容器 */
+.lottery-container {
+  display: flex;
+  justify-content: center;
+  margin: 40rpx 0;
+}
+
+.wheel-container {
+  position: relative;
+  width: 600rpx;
+  height: 600rpx;
+}
+
+/* 转盘 */
+.wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.3);
+}
+
+/* 扇形区域 */
+.sector {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 0;
+  clip-path: polygon(0 0, 100% 0, 86.6% 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sector-content {
+  position: absolute;
+  top: 20%;
+  left: 60%;
+  transform: rotate(-30deg);
+  text-align: center;
+}
+
+.prize-name {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1rpx 1rpx 2rpx rgba(0, 0, 0, 0.5);
+}
+
+/* 指针 */
+.pointer {
+  position: absolute;
+  top: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20rpx solid transparent;
+  border-right: 20rpx solid transparent;
+  border-bottom: 60rpx solid #ff4757;
+  z-index: 10;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.3));
+}
+
+/* 中心按钮 */
+.center-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 15rpx rgba(255, 107, 107, 0.4);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.center-btn.spinning {
+  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.btn-text {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* 抽奖规则 */
+.lottery-rules {
+  margin: 30rpx 0;
+}
+
+.rules-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.rule-item {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 30rpx;
+}
+
+/* 结果弹窗 */
+.result-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: white;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  text-align: center;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.3);
+}
+
+.result-header {
+  margin-bottom: 30rpx;
+}
+
+.congrats-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.result-prize {
+  margin: 30rpx 0;
+  padding: 30rpx;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  border-radius: 15rpx;
+}
+
+.prize-text {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #d63031;
+}
+
+.result-footer {
+  margin: 30rpx 0;
+}
+
+.current-points {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.result-btn {
+  width: 200rpx;
+  margin: 0 auto;
+}

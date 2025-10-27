@@ -2,10 +2,17 @@
   "pages": [
     "pages/index/index",
     "pages/vote/vote",
+    "pages/vote-detail/vote-detail",
     "pages/create-vote/create-vote",
     "pages/ranking/ranking",
     "pages/profile/profile",
     "pages/shop/shop",
+    "pages/lottery/lottery",
+    "pages/lottery-history/lottery-history",
+    "pages/smart-contract/smart-contract",
+    "pages/reward-contract/reward-contract",
+    "pages/reward-contract-simple/reward-contract-simple",
+    "pages/admin/admin",
     "pages/blockchain-demo/blockchain-demo"
   ],
   "window": {

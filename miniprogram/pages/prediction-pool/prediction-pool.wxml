@@ -1,0 +1,221 @@
+<!-- pages/prediction-pool/prediction-pool.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">预测资金池</text>
+    <text class="page-desc">智能合约驱动的多人预测游戏</text>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === 'active' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="active"
+    >
+      <text>进行中</text>
+    </view>
+    <view 
+      class="tab-item {{activeTab === 'my' ? 'active' : ''}}" 
+      bindtap="switchTab" 
+      data-tab="my"
+    >
+      <text>我的资金池</text>
+    </view>
+  </view>
+
+  <!-- 创建按钮 -->
+  <view class="create-section">
+    <button class="btn-primary create-btn" bindtap="showCreatePool">
+      <text class="btn-icon">💰</text>
+      <text>创建预测池</text>
+    </button>
+  </view>
+
+  <!-- 资金池列表 -->
+  <view class="pool-list" wx:if="{{!loading}}">
+    <view class="pool-item card" wx:for="{{pools}}" wx:key="id">
+      <view class="pool-header">
+        <view class="pool-info">
+          <text class="pool-title">{{item.title}}</text>
+          <text class="stock-info">{{item.stockCode}} - {{item.stockName}}</text>
+        </view>
+        <view class="pool-status">
+          <text class="status-badge {{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+
+      <view class="pool-details">
+        <view class="detail-row">
+          <text class="detail-label">目标价格:</text>
+          <text class="detail-value">¥{{item.targetPrice}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">当前价格:</text>
+          <text class="detail-value">¥{{item.currentPrice}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">奖池总额:</text>
+          <text class="detail-value prize-pool">{{item.totalPool}}积分</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">参与人数:</text>
+          <text class="detail-value">{{item.participants}}人</text>
+        </view>
+      </view>
+
+      <view class="prediction-stats">
+        <view class="stat-item">
+          <text class="stat-label">看涨</text>
+          <text class="stat-value up">{{item.upCount}}人</text>
+          <text class="stat-amount">{{item.upAmount}}积分</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-label">看跌</text>
+          <text class="stat-value down">{{item.downCount}}人</text>
+          <text class="stat-amount">{{item.downAmount}}积分</text>
+        </view>
+      </view>
+
+      <view class="pool-time">
+        <text class="time-text">{{item.endTimeText}}</text>
+      </view>
+
+      <view class="pool-actions">
+        <button class="btn-outline" bindtap="viewPool" data-id="{{item.id}}">
+          查看详情
+        </button>
+        <button 
+          class="btn-primary" 
+          wx:if="{{item.status === 'active' && !item.userJoined}}"
+          bindtap="joinPool" 
+          data-id="{{item.id}}"
+        >
+          加入预测
+        </button>
+        <button 
+          class="btn-success" 
+          wx:if="{{item.userJoined}}"
+          disabled
+        >
+          已参与
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && pools.length === 0}}">
+    <text class="empty-icon">💰</text>
+    <text class="empty-text">
+      {{activeTab === 'active' ? '暂无进行中的预测池' : '您还没有创建预测池'}}
+    </text>
+    <text class="empty-desc">
+      {{activeTab === 'active' ? '创建一个预测池开始游戏吧' : '点击上方按钮创建您的第一个预测池'}}
+    </text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 创建弹窗 -->
+<view class="modal" wx:if="{{showCreateModal}}">
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">创建预测池</text>
+      <text class="modal-close" bindtap="hideCreateModal">✕</text>
+    </view>
+    
+    <view class="form-group">
+      <text class="form-label">预测标题</text>
+      <input 
+        class="form-input" 
+        placeholder="例如：平安银行明日收盘价预测"
+        value="{{createForm.title}}"
+        bindinput="onFormInput"
+        data-field="title"
+      />
+    </view>
+
+    <view class="form-row">
+      <view class="form-group half">
+        <text class="form-label">股票代码</text>
+        <input 
+          class="form-input" 
+          placeholder="000001"
+          value="{{createForm.stockCode}}"
+          bindinput="onFormInput"
+          data-field="stockCode"
+        />
+      </view>
+      <view class="form-group half">
+        <text class="form-label">股票名称</text>
+        <input 
+          class="form-input" 
+          placeholder="平安银行"
+          value="{{createForm.stockName}}"
+          bindinput="onFormInput"
+          data-field="stockName"
+        />
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">目标价格</text>
+      <input 
+        class="form-input" 
+        placeholder="12.50"
+        type="digit"
+        value="{{createForm.targetPrice}}"
+        bindinput="onFormInput"
+        data-field="targetPrice"
+      />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">结束时间</text>
+      <picker 
+        mode="datetime" 
+        value="{{createForm.endTime}}" 
+        bindchange="onFormInput"
+        data-field="endTime"
+      >
+        <view class="picker-view">
+          {{createForm.endTime || '选择结束时间'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <view class="form-group half">
+        <text class="form-label">最小投注</text>
+        <input 
+          class="form-input" 
+          type="number"
+          value="{{createForm.minStake}}"
+          bindinput="onFormInput"
+          data-field="minStake"
+        />
+      </view>
+      <view class="form-group half">
+        <text class="form-label">最大投注</text>
+        <input 
+          class="form-input" 
+          type="number"
+          value="{{createForm.maxStake}}"
+          bindinput="onFormInput"
+          data-field="maxStake"
+        />
+      </view>
+    </view>
+
+    <view class="modal-actions">
+      <button class="btn-outline" bindtap="hideCreateModal">取消</button>
+      <button class="btn-primary" bindtap="createPool">创建</button>
+    </view>
+  </view>
+</view>

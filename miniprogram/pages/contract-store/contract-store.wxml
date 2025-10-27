@@ -1,0 +1,136 @@
+<!-- pages/contract-store/contract-store.wxml -->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">智能合约商店</text>
+    <text class="page-desc">按需购买，即买即用</text>
+  </view>
+
+  <!-- 套餐推荐 -->
+  <view class="package-banner" bindtap="viewPackages">
+    <view class="banner-content">
+      <text class="banner-title">🎉 套餐优惠</text>
+      <text class="banner-desc">购买套餐最高省¥264</text>
+    </view>
+    <text class="banner-arrow">></text>
+  </view>
+
+  <!-- 分类标签 -->
+  <view class="category-tabs">
+    <view 
+      class="tab-item {{activeCategory === item.id ? 'active' : ''}}"
+      wx:for="{{categories}}" 
+      wx:key="id"
+      bindtap="switchCategory"
+      data-id="{{item.id}}"
+    >
+      <text class="tab-icon">{{item.icon}}</text>
+      <text class="tab-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 合约列表 -->
+  <view class="contract-list">
+    <block wx:for="{{categories}}" wx:key="id">
+      <view class="category-section" wx:if="{{activeCategory === item.id}}">
+        <view 
+          class="contract-card {{contract.isPurchased ? 'purchased' : ''}}"
+          wx:for="{{item.contracts}}" 
+          wx:for-item="contract"
+          wx:key="id"
+          bindtap="viewContract"
+          data-id="{{contract.id}}"
+        >
+          <!-- 热门标签 -->
+          <view class="popular-tag" wx:if="{{contract.popular}}">
+            <text>🔥 热门</text>
+          </view>
+
+          <!-- 免费标签 -->
+          <view class="free-tag" wx:if="{{contract.isFree}}">
+            <text>免费</text>
+          </view>
+
+          <!-- 已购买标签 -->
+          <view class="purchased-tag" wx:if="{{contract.isPurchased}}">
+            <text>✅ 已购买</text>
+          </view>
+
+          <view class="contract-header">
+            <text class="contract-name">{{contract.name}}</text>
+            <view class="contract-price">
+              <text class="current-price" wx:if="{{!contract.isFree}}">¥{{contract.price}}</text>
+              <text class="original-price" wx:if="{{contract.originalPrice > contract.price}}">¥{{contract.originalPrice}}</text>
+              <text class="free-price" wx:if="{{contract.isFree}}">免费</text>
+            </view>
+          </view>
+
+          <view class="contract-desc">
+            <text>{{contract.description}}</text>
+          </view>
+
+          <view class="contract-features">
+            <view class="feature-item" wx:for="{{contract.features}}" wx:key="*this">
+              <text class="feature-dot">•</text>
+              <text class="feature-text">{{item}}</text>
+            </view>
+          </view>
+
+          <view class="contract-action">
+            <button class="action-btn {{contract.isPurchased ? 'manage-btn' : 'buy-btn'}}">
+              {{contract.isPurchased ? '管理合约' : contract.isFree ? '立即使用' : '立即购买'}}
+            </button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+<!-- 购买确认弹窗 -->
+<view class="modal" wx:if="{{showPurchaseModal}}">
+  <view class="modal-content">
+    <view class="modal-header">
+      <text class="modal-title">购买合约</text>
+      <text class="modal-close" bindtap="closePurchaseModal">✕</text>
+    </view>
+
+    <view class="purchase-info">
+      <view class="contract-info">
+        <text class="info-name">{{selectedContract.name}}</text>
+        <text class="info-desc">{{selectedContract.description}}</text>
+      </view>
+
+      <view class="price-info">
+        <text class="price-label">价格</text>
+        <view class="price-detail">
+          <text class="current-price">¥{{selectedContract.price}}</text>
+          <text class="original-price" wx:if="{{selectedContract.originalPrice > selectedContract.price}}">
+            原价¥{{selectedContract.originalPrice}}
+          </text>
+        </view>
+      </view>
+
+      <view class="features-info">
+        <text class="features-label">功能特性</text>
+        <view class="features-list">
+          <view class="feature-item" wx:for="{{selectedContract.features}}" wx:key="*this">
+            <text class="feature-check">✓</text>
+            <text class="feature-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="purchase-note">
+        <text class="note-text">• 一次购买，永久使用</text>
+        <text class="note-text">• 包含免费更新和技术支持</text>
+        <text class="note-text">• 支持微信支付、支付宝</text>
+      </view>
+    </view>
+
+    <view class="modal-actions">
+      <button class="btn-outline" bindtap="closePurchaseModal">取消</button>
+      <button class="btn-primary" bindtap="purchaseContract">确认购买</button>
+    </view>
+  </view>
+</view>

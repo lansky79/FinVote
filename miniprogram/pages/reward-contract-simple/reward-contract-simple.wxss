@@ -1,0 +1,303 @@
+/* pages/reward-contract-simple/reward-contract-simple.wxss */
+
+.page-header {
+  text-align: center;
+  margin-bottom: 20rpx;
+  padding: 30rpx 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 15rpx;
+}
+
+.page-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.page-desc {
+  font-size: 22rpx;
+  opacity: 0.9;
+}
+
+/* 状态卡片 */
+.status-card {
+  text-align: center;
+  margin-bottom: 20rpx;
+  padding: 25rpx;
+  background: #e8f5e8;
+  border-radius: 12rpx;
+}
+
+.status-text {
+  font-size: 26rpx;
+  color: #4caf50;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5rpx;
+}
+
+.status-desc {
+  font-size: 22rpx;
+  color: #666;
+}
+
+/* 创建按钮 */
+.create-section {
+  margin-bottom: 25rpx;
+}
+
+.create-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25rpx;
+  font-size: 26rpx;
+}
+
+.btn-icon {
+  margin-right: 8rpx;
+  font-size: 20rpx;
+}
+
+/* 合约列表 */
+.contract-list {
+  margin-bottom: 30rpx;
+}
+
+.contract-item {
+  background: white;
+  border-radius: 12rpx;
+  padding: 25rpx;
+  margin-bottom: 15rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border-left: 4rpx solid #667eea;
+}
+
+.contract-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.contract-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.contract-status {
+  padding: 4rpx 10rpx;
+  border-radius: 10rpx;
+  font-size: 20rpx;
+  color: white;
+}
+
+.contract-status.active {
+  background: #4caf50;
+}
+
+.contract-status.pending {
+  background: #ff9800;
+}
+
+.contract-desc {
+  margin-bottom: 15rpx;
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.contract-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+  padding: 15rpx;
+  background: #f8f9fa;
+  border-radius: 8rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 5rpx;
+}
+
+.stat-value {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.contract-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.contract-actions button {
+  flex: 1;
+  margin: 0;
+  padding: 15rpx;
+  font-size: 22rpx;
+}
+
+/* 功能介绍 */
+.feature-intro {
+  margin-bottom: 30rpx;
+}
+
+.intro-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15rpx;
+  text-align: center;
+}
+
+.feature-grid {
+  display: flex;
+  justify-content: space-around;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 20rpx;
+  background: white;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  width: 200rpx;
+}
+
+.feature-icon {
+  font-size: 28rpx;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.feature-name {
+  font-size: 22rpx;
+  color: #333;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.action-buttons button {
+  width: 250rpx;
+  margin: 0;
+}
+
+/* 弹窗样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 85%;
+  max-width: 500rpx;
+  background: white;
+  border-radius: 15rpx;
+  padding: 30rpx;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25rpx;
+}
+
+.modal-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 28rpx;
+  color: #999;
+  padding: 5rpx;
+}
+
+.form-group {
+  margin-bottom: 20rpx;
+}
+
+.form-row {
+  display: flex;
+  gap: 15rpx;
+}
+
+.form-group.half {
+  flex: 1;
+}
+
+.form-label {
+  font-size: 24rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 15rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  box-sizing: border-box;
+}
+
+.reward-preview {
+  margin: 25rpx 0;
+  padding: 20rpx;
+  background: #e8f5e8;
+  border-radius: 10rpx;
+}
+
+.preview-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.preview-text {
+  font-size: 22rpx;
+  color: #4caf50;
+  display: block;
+  margin-bottom: 5rpx;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15rpx;
+  margin-top: 30rpx;
+}
+
+.modal-actions button {
+  flex: 1;
+  margin: 0;
+  padding: 20rpx;
+  font-size: 24rpx;
+}

@@ -4,6 +4,7 @@ const app = getApp()
 Page({
   data: {
     userInfo: null,
+    isAdmin: false,
     recentVotes: []
   },
 
@@ -17,11 +18,16 @@ Page({
 
   // 加载页面数据
   loadData() {
+    const userInfo = app.globalData.userInfo
+    const adminUsers = ['test_user_123', 'user_001'] // 管理员用户ID列表
+    const isAdmin = userInfo && adminUsers.includes(userInfo.id)
+    
     this.setData({
-      userInfo: app.globalData.userInfo
+      userInfo: userInfo,
+      isAdmin: isAdmin
     })
     
-    if (app.globalData.userInfo) {
+    if (userInfo) {
       this.loadRecentVotes()
     }
   },
@@ -167,6 +173,13 @@ Page({
   goToExchangeHistory() {
     wx.navigateTo({
       url: '/pages/exchange-history/exchange-history'
+    })
+  },
+
+  // 跳转到管理后台
+  goToAdmin() {
+    wx.navigateTo({
+      url: '/pages/admin/admin'
     })
   },
 
